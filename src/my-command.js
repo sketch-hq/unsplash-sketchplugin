@@ -35,22 +35,21 @@ export default function(context) {
 function process(unsplashJSON) {
   var currentLayer = sketch.getSelectedDocument().selectedLayers.layers[0]
   var data = JSON.parse(unsplashJSON)[0]
-  console.log(data)
+  // console.log(data)
   var imageData = getImageDataFromURL(data.urls.regular)
   fillLayerWithImageData(currentLayer._object, imageData)
   Settings.setLayerSettingForKey(currentLayer, 'unsplash.photo.id', data.id)
   UI.message('📷 by ' + data.user.name + ' on Unsplash')
 }
 
-// TODO: add the source URL and/or image ID as metadata in the layer, using Sketch API, so the user can keep track of where the image came from
-// TODO: add a command to allow users to open the URL for a selected image
+
+// TODO: UI to ask the user for their API key
 // TODO: Name the layer?
 // DONE: use the shape's orientation to request an appropriate image
 // TODO: use the shape's size to request an appropriately sized image
-
 // TODO: use SketchAPI for this
 function getImageDataFromURL(url) {
-  console.log(`Grabbing image from ${url}`)
+  // console.log(`Grabbing image from ${url}`)
   var request = NSURLRequest.requestWithURL(NSURL.URLWithString(url))
   var data = NSURLConnection.sendSynchronousRequest_returningResponse_error(request, null, null)
   var image

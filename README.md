@@ -1,11 +1,5 @@
 # unsplash
 
-1) If we can have the crediting say: “photo (or photo icon) by photographer name, *on* Unsplash (no TM)” that would be great.
-2) when it says “random”, can it say “random photo from Unsplash” ? I think this would make it more clear for everyone using the feature.
-3) No need to work on advanced features for now. You guys know your core userbase the best, and I think being bundled in as the default photo source for random photos is great for us, and helpful for your community. If you wanted to work on Advanced features, we can do that at a later point, but I think making it super simple for a person to pull up a random photo from Unsplash when making mockups is the most useful :slightly_smiling_face:
-4) We’d love to be bundled in the default :slightly_smiling_face:
-5) No need to link out to the contributor’s profile. I think it will cause complexity for you.
-
 ## Image Data
 
 ```
