@@ -4,15 +4,21 @@
   "icon": "icon.png",
   "commands": [
     {
-      "name": "my-command",
-      "identifier": "my-command-identifier",
+      "name": "Random Image",
+      "identifier": "random-image",
+      "script": "./my-command.js"
+    },
+    {
+      "name": "Image Details",
+      "identifier": "image-details",
       "script": "./my-command.js"
     }
   ],
   "menu": {
-    "title": "unsplash",
+    "title": "Unsplash",
     "items": [
-      "my-command-identifier"
+      "random-image",
+      "image-details"
     ]
   }
 }

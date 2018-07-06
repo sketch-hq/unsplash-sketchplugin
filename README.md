@@ -1,93 +1,88 @@
 # unsplash
 
-_This plugin was created using `skpm`. For a detailed explanation on how things work, checkout the [skpm Readme](https://github.com/skpm/skpm/blob/master/README.md)._
+## Image Data
 
-## Usage
-
-Install the dependencies
-
-```bash
-npm install
 ```
 
-Once the installation is done, you can run some commands inside the project folder:
-
-```bash
-npm run build
-```
-
-To watch for changes:
-
-```bash
-npm run watch
-```
-
-Additionally, if you wish to run the plugin every time it is built:
-
-```bash
-npm run start
-```
-
-## Custom Configuration
-
-### Babel
-
-To customize Babel, you have two options:
-
-* You may create a [`.babelrc`](https://babeljs.io/docs/usage/babelrc) file in your project's root directory. Any settings you define here will overwrite matching config-keys within skpm preset. For example, if you pass a "presets" object, it will replace & reset all Babel presets that skpm defaults to.
-
-* If you'd like to modify or add to the existing Babel config, you must use a `webpack.skpm.config.js` file. Visit the [Webpack](#webpack) section for more info.
-
-### Webpack
-
-To customize webpack create `webpack.skpm.config.js` file which exports function that will change webpack's config.
-
-```js
-/**
- * Function that mutates original webpack config.
- * Supports asynchronous changes when promise is returned.
- *
- * @param {object} config - original webpack config.
- * @param {boolean} isPluginCommand - whether the config is for a plugin command or a resource
- **/
-module.exports = function(config, isPluginCommand) {
-  /** you can change config here **/
+{
+    categories =     (
+    );
+    color = "#FF7D80";
+    "created_at" = "2017-11-03T16:22:43-04:00";
+    "current_user_collections" =     (
+    );
+    description = "<null>";
+    downloads = 292;
+    exif =     {
+        aperture = 4;
+        "exposure_time" = "1/50";
+        "focal_length" = 70;
+        iso = 6400;
+        make = Canon;
+        model = "Canon EOS 5D Mark II";
+    };
+    height = 5616;
+    id = dzUI4CQvSIk;
+    "liked_by_user" = 0;
+    likes = 26;
+    links =     {
+        download = "https://unsplash.com/photos/dzUI4CQvSIk/download";
+        "download_location" = "https://api.unsplash.com/photos/dzUI4CQvSIk/download";
+        html = "https://unsplash.com/photos/dzUI4CQvSIk";
+        self = "https://api.unsplash.com/photos/dzUI4CQvSIk";
+    };
+    location =     {
+        city = Carmel;
+        country = "United States";
+        name = Carmel;
+        position =         {
+            latitude = "39.978371";
+            longitude = "-86.1180435";
+        };
+        title = "Carmel, United States";
+    };
+    slug = "<null>";
+    sponsored = 0;
+    "updated_at" = "2017-11-04T05:40:35-04:00";
+    urls =     {
+        full = "https://images.unsplash.com/photo-1509739809221-abb52b6ebfc5?ixlib=rb-0.3.5&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjI2MDAzfQ&s=3f017d50d3fa5bc7e939cb2822458089";
+        raw = "https://images.unsplash.com/photo-1509739809221-abb52b6ebfc5?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjI2MDAzfQ&s=01c41a6da053c02730b092ec2a0362be";
+        regular = "https://images.unsplash.com/photo-1509739809221-abb52b6ebfc5?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjI2MDAzfQ&s=143300c018b643df0ed6f2fdd437a022";
+        small = "https://images.unsplash.com/photo-1509739809221-abb52b6ebfc5?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjI2MDAzfQ&s=c6c0760ad32048a095cc0eb666ef399d";
+        thumb = "https://images.unsplash.com/photo-1509739809221-abb52b6ebfc5?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjI2MDAzfQ&s=e26f0ed2977182785b4e676743320933";
+    };
+    user =     {
+        bio = "Indianapolis based photographer, videographer, freelance designer. Instagram: @artbyhybrid //
+\nLIVE. CREATE. INSPIRE. Available for freelance work - madisoncoren@gmail.com";
+        "first_name" = Hybrid;
+        id = tIXKLyaN9PY;
+        "instagram_username" = artbyhybrid;
+        "last_name" = "<null>";
+        links =         {
+            followers = "https://api.unsplash.com/users/_hybrid_/followers";
+            following = "https://api.unsplash.com/users/_hybrid_/following";
+            html = "https://unsplash.com/@_hybrid_";
+            likes = "https://api.unsplash.com/users/_hybrid_/likes";
+            photos = "https://api.unsplash.com/users/_hybrid_/photos";
+            portfolio = "https://api.unsplash.com/users/_hybrid_/portfolio";
+            self = "https://api.unsplash.com/users/_hybrid_";
+        };
+        location = indianapolis;
+        name = Hybrid;
+        "portfolio_url" = "<null>";
+        "profile_image" =         {
+            large = "https://images.unsplash.com/profile-1509210755922-56355b2314e1?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=128&w=128&s=72f29f20fc0e598a5b384da986ea868c";
+            medium = "https://images.unsplash.com/profile-1509210755922-56355b2314e1?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=64&w=64&s=41c643b34b8438d697e3e22566e0c46c";
+            small = "https://images.unsplash.com/profile-1509210755922-56355b2314e1?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&cs=tinysrgb&fit=crop&h=32&w=32&s=2c0588c5f36216664474aef1c026959a";
+        };
+        "total_collections" = 9;
+        "total_likes" = 205;
+        "total_photos" = 89;
+        "twitter_username" = AmbitiousCloud;
+        "updated_at" = "2018-05-03T14:00:04-04:00";
+        username = "_hybrid_";
+    };
+    views = 189188;
+    width = 3744;
 }
-```
-
-## Debugging
-
-To view the output of your `console.log`, you have a few different options:
-
-* Use the [`sketch-dev-tools`](https://github.com/skpm/sketch-dev-tools)
-* Open `Console.app` and look for the sketch logs
-* Look at the `~/Library/Logs/com.bohemiancoding.sketch3/Plugin Output.log` file
-
-Skpm provides a convenient way to do the latter:
-
-```bash
-skpm log
-```
-
-The `-f` option causes `skpm log` to not stop when the end of logs is reached, but rather to wait for additional data to be appended to the input
-
-## Publishing your plugin
-
-```bash
-skpm publish <bump>
-```
-
-(where `bump` can be `patch`, `minor` or `major`)
-
-`skpm publish` will create a new release on your GitHub repository and create an appcast file in order for Sketch users to be notified of the update.
-
-You will need to specify a `repository` in the `package.json`:
-
-```diff
-...
-+ "repository" : {
-+   "type": "git",
-+   "url": "git+https://github.com/ORG/NAME.git"
-+  }
-...
 ```

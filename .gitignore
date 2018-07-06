@@ -1,5 +1,5 @@
 # build artifacts
-plugin.sketchplugin
+unsplash.sketchplugin
 
 # npm
 node_modules
