@@ -19,7 +19,7 @@ export default function(context) {
   if (s.frame().width() == s.frame().height()) {
     orientation = 'squarish'
   }
-  
+
   var url = API_ENDPOINT + action + "?client_id=" + API_KEY + "&count=1&orientation=" + orientation
 
   fetch(url)
@@ -30,10 +30,10 @@ export default function(context) {
 
 function process(unsplashJSON) {
   var data = JSON.parse(unsplashJSON)[0]
-  log(data)
+  // console.log(data)
   var id = data.id
   var image_URL = data.urls.regular
-  // log(image_URL)
+  // console.log(image_URL)
   var imageData = getImageDataFromURL(image_URL)
   fillLayerWithImageData(context.selection[0], imageData)
   context.selection[0].name = id
@@ -48,15 +48,14 @@ function process(unsplashJSON) {
 
 // TODO: use SketchAPI for this
 function getImageDataFromURL(url) {
-
+  console.log(`Grabbing image from ${url}`)
   var request = NSURLRequest.requestWithURL(NSURL.URLWithString(url))
   var data = NSURLConnection.sendSynchronousRequest_returningResponse_error(request, null, null)
   var image
 
   if (!data){
     UI.message('Error fetching image')
-    // TODO: provide a default image
-    image = NSImage.alloc().initByReferencingFile(plugin.urlForResourceNamed("Placeholder.png").path())
+    image = NSImage.alloc().initByReferencingFile(context.plugin.urlForResourceNamed("placeholder.png").path())
   } else {
     image = NSImage.alloc().initWithData(data)
   }
