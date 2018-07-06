@@ -6,14 +6,14 @@
   "icon": "icon.png",
   "commands": [
     {
-      "name": "Random Image",
+      "name": "Random Photo From Unsplash",
       "identifier": "random-image",
       "script": "./my-command.js"
     },
     {
-      "name": "Image Details",
+      "name": "View Photo on Unsplash",
       "identifier": "image-details",
-      "script": "./my-command.js"
+      "script": "./imageDetails.js"
     }
   ],
   "menu": {

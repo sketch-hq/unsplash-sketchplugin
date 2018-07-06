@@ -1,12 +1,16 @@
-const UI = require('sketch/ui')
-const Image  = require('sketch/dom').Image
+const sketch = require('sketch')
+const UI = sketch.UI
+const Image = sketch.Image
+const Settings = sketch.Settings
 
 export default function(context) {
   const API_KEY = "bfd993ac8c14516588069b3fc664b216d0e20fb9b9fa35aa06fcc3ba6e0bc703"
   const API_ENDPOINT = "https://api.unsplash.com"
   const action = "/photos/random"
   const fetch = require('sketch-polyfill-fetch')
-  var s = context.selection[0]
+  // TODO: show warning if no layer is selected
+  // TODO: fill multiple layers
+  var s = sketch.getSelectedDocument().selectedLayers.layers[0]._object
 
   // orientation: landscape | portrait | squarish
   var orientation
@@ -29,15 +33,13 @@ export default function(context) {
 }
 
 function process(unsplashJSON) {
+  var currentLayer = sketch.getSelectedDocument().selectedLayers.layers[0]
   var data = JSON.parse(unsplashJSON)[0]
-  // console.log(data)
-  var id = data.id
-  var image_URL = data.urls.regular
-  // console.log(image_URL)
-  var imageData = getImageDataFromURL(image_URL)
-  fillLayerWithImageData(context.selection[0], imageData)
-  context.selection[0].name = id
-  UI.message('📷 by ' + data.user.name + ', via Unsplash™')
+  console.log(data)
+  var imageData = getImageDataFromURL(data.urls.regular)
+  fillLayerWithImageData(currentLayer._object, imageData)
+  Settings.setLayerSettingForKey(currentLayer, 'unsplash.photo.id', data.id)
+  UI.message('📷 by ' + data.user.name + ' on Unsplash')
 }
 
 // TODO: add the source URL and/or image ID as metadata in the layer, using Sketch API, so the user can keep track of where the image came from
