@@ -2,6 +2,7 @@ const sketch = require('sketch')
 const UI = sketch.UI
 const Image = sketch.Image
 const Settings = sketch.Settings
+import { Unsplash } from './unsplash'
 
 export default function(context) {
   const API_KEY = "bfd993ac8c14516588069b3fc664b216d0e20fb9b9fa35aa06fcc3ba6e0bc703"

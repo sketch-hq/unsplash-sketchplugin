@@ -4,6 +4,7 @@
   "compatibleVersion": 3,
   "bundleVersion": 1,
   "icon": "icon.png",
+  "suppliesData" : true,
   "commands": [
     {
       "name": "Random Photo From Unsplash",
@@ -14,6 +15,16 @@
       "name": "View Photo on Unsplash",
       "identifier": "image-details",
       "script": "./imageDetails.js"
+    },
+    {
+      "script" : "DataProvider.js",
+      "handlers" : {
+        "actions" : {
+          "Startup" : "onStartup",
+          "Shutdown" : "onShutdown",
+          "SupplyPhoto" : "onSupplyPhoto"
+        }
+      }
     }
   ],
   "menu": {
