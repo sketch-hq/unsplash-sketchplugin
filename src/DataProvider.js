@@ -10,22 +10,29 @@ const Settings     = sketch.Settings
 import { Unsplash } from './unsplash'
 
 export function onStartup() {
-  // Register a method to supply a random Unsplash photo
   DataSupplier.registerDataSupplier('public.image', 'Random Photo From Unsplash', 'SupplyPhoto');
 }
 
 export function onShutdown() {
   DataSupplier.deregisterDataSuppliers();
-  // Remove temporary files
+  // TODO: Remove temporary files
 }
 
 export function onSupplyPhoto(context){
   let dataKey = context.data.key
-  context.data.layers.forEach((layer, index) => setImageFor(layer, index, dataKey))
+  let items = context.data.layers.length > 0 ? context.data.layers : context.data.overrides
+  items.forEach((item, index) => setImageFor(item, index, dataKey))
 }
 
-function setImageFor(layer, index, dataKey){
-  var orientation
+function setImageFor(item, index, dataKey){
+  let layer
+  if(item.className() == 'MSDataOverride') {
+    layer = item.symbolInstance() // or item.affectedLayer(), but both of them are not really what we need… Check `MSOverrideRepresentation` to get the true size of the affected layer after being resized on the Symbol instance
+  } else {
+    layer = item
+  }
+
+  let orientation
   if (layer.frame().width() > layer.frame().height()) {
     orientation = 'landscape'
   }
@@ -37,24 +44,34 @@ function setImageFor(layer, index, dataKey){
   }
   let url = API_ENDPOINT + action + "?client_id=" + API_KEY + "&count=1&orientation=" + orientation
 
+  UI.message('🕑 Downloading…')
   fetch(url)
     .then(response => response.text())
-    .then(text => process(text, dataKey, index, layer))
+    .then(text => process(text, dataKey, index, item))
 }
 
-function process(unsplashJSON, dataKey, index, layer) {
+function process(unsplashJSON, dataKey, index, item) {
   let data = JSON.parse(unsplashJSON)[0]
-  let path = getImageFromURL(data.urls.regular)
+  console.log(data)
+  let path = getImageFromURL(data.urls.thumb) // for bandwidth saving
+  // let path = getImageFromURL(data.urls.regular)
   DataSupplier.supplyDataAtIndex(dataKey, path, index)
-  Settings.setLayerSettingForKey(layer, 'unsplash.photo.id', data.id)
+  // TODO: if layer belongs to a Symbol, we shouldn't set the data on the layer, but on the instance, storing a reference to the override to use it later
+  console.log(`We're setting an ID on ${item}`);
+  if(item.className() == 'MSDataOverride') {
+    let overrideID = item.overrideIdentifier()
+  } else {
+    // This is a regular layer
+    Settings.setLayerSettingForKey(item, 'unsplash.photo.id', data.id)
+  }
   UI.message('📷 by ' + data.user.name + ' on Unsplash')
 }
 
 function getImageFromURL(url) {
   let request = NSURLRequest.requestWithURL(NSURL.URLWithString(url))
-  let data = NSURLConnection.sendSynchronousRequest_returningResponse_error(request, null, null)
-  if (data) {
-    return saveTempFileFromImageData(data)
+  let imageData = NSURLConnection.sendSynchronousRequest_returningResponse_error(request, null, null)
+  if (imageData) {
+    return saveTempFileFromImageData(imageData)
   } else {
     return context.plugin.urlForResourceNamed("placeholder.png").path()
   }
@@ -62,13 +79,9 @@ function getImageFromURL(url) {
 
 function saveTempFileFromImageData(imageData){
   let guid = NSProcessInfo.processInfo().globallyUniqueString()
-  let folder = NSTemporaryDirectory().stringByAppendingPathComponent(guid)
-  let path = folder.stringByAppendingPathComponent('unsplash.jpg')
-  if ( !NSFileManager.defaultManager().createDirectoryAtPath_withIntermediateDirectories_attributes_error(folder,false,nil,nil) ) {
-    console.log('Error creating temp directory')
-    return nil
-  } else {
-    imageData.writeToFile_atomically(path, true)
-    return path
-  }
+  let folder = NSTemporaryDirectory().stringByAppendingPathComponent('com.sketchapp.unsplash-plugin')
+  let path = folder.stringByAppendingPathComponent(`${guid}.jpg`)
+  NSFileManager.defaultManager().createDirectoryAtPath_withIntermediateDirectories_attributes_error(folder,false,nil,nil)
+  imageData.writeToFile_atomically(path, true)
+  return path
 }
