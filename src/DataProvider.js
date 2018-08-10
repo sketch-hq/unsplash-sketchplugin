@@ -5,6 +5,7 @@ const action       = "/photos/random"
 const sketch       = require('sketch')
 const DataSupplier = sketch.DataSupplier
 const UI           = sketch.UI
+const Settings     = sketch.Settings
 
 import { Unsplash } from './unsplash'
 
@@ -35,15 +36,18 @@ function setImageFor(layer, index, dataKey){
     orientation = 'squarish'
   }
   let url = API_ENDPOINT + action + "?client_id=" + API_KEY + "&count=1&orientation=" + orientation
+
   fetch(url)
     .then(response => response.text())
-    .then(text => process(text, dataKey, index))
+    .then(text => process(text, dataKey, index, layer))
 }
 
-function process(unsplashJSON, dataKey, index) {
+function process(unsplashJSON, dataKey, index, layer) {
   let data = JSON.parse(unsplashJSON)[0]
   let path = getImageFromURL(data.urls.regular)
   DataSupplier.supplyDataAtIndex(dataKey, path, index)
+  Settings.setLayerSettingForKey(layer, 'unsplash.photo.id', data.id)
+  UI.message('📷 by ' + data.user.name + ' on Unsplash')
 }
 
 function getImageFromURL(url) {
