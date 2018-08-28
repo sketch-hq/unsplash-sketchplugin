@@ -29,9 +29,6 @@
   ],
   "menu": {
     "title": "Unsplash",
-    "items": [
-      "random-image",
-      "image-details"
-    ]
+    "items": []
   }
 }

@@ -1,5 +1,10 @@
 # unsplash
 
+## Issues
+
+- We'll be effectively sharing our API key with the world. We need to double check with them that this is ok
+- TODO: View Photo does not work for overrides
+
 ## Image Data
 
 ```
