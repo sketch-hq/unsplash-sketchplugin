@@ -10,7 +10,7 @@ const Settings     = sketch.Settings
 import { Unsplash } from './unsplash'
 
 export function onStartup() {
-  DataSupplier.registerDataSupplier('public.image', 'Random Photo From Unsplash', 'SupplyPhoto');
+  DataSupplier.registerDataSupplier('public.image', 'Unsplash Random Photo', 'SupplyPhoto');
 }
 
 export function onShutdown() {
@@ -53,8 +53,7 @@ function setImageFor(item, index, dataKey){
 function process(unsplashJSON, dataKey, index, item) {
   let data = JSON.parse(unsplashJSON)[0]
   console.log(data)
-  let path = getImageFromURL(data.urls.thumb) // for bandwidth saving
-  // let path = getImageFromURL(data.urls.regular)
+  let path = getImageFromURL(data.urls.regular)
   DataSupplier.supplyDataAtIndex(dataKey, path, index)
   // TODO: if layer belongs to a Symbol, we shouldn't set the data on the layer, but on the instance, storing a reference to the override to use it later
   console.log(`We're setting an ID on ${item}`);
