@@ -20,7 +20,7 @@
   "devDependencies": {
     "@skpm/builder": "^0.5.8"
   },
-  "author": "Ale M <bomberstudios@gmail.com>",
+  "author": "Bohemian Coding",
   "dependencies": {
     "sketch-polyfill-fetch": "^0.3.3"
   }
