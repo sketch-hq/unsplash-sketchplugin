@@ -13,7 +13,7 @@ export function onStartup () {
 
 export function onShutdown () {
   DataSupplier.deregisterDataSuppliers()
-  // TODO: Remove temporary files
+  // TODO Remove temporary files
 }
 
 export function onSupplyPhoto (context) {
@@ -58,7 +58,7 @@ function process (unsplashJSON, dataKey, index, item) {
   // console.log(data)
   let path = getImageFromURL(data.urls.regular)
   DataSupplier.supplyDataAtIndex(dataKey, path, index)
-  // TODO: if layer belongs to a Symbol, we shouldn't set the data on the layer, but on the instance, storing a reference to the override to use it later
+  // TODO if layer belongs to a Symbol, we shouldn't set the data on the layer, but on the instance, storing a reference to the override to use it later
   // console.log(`We're setting an ID on ${item}`)
   if (item.className() === 'MSDataOverride') {
     // let overrideID = item.overrideIdentifier()

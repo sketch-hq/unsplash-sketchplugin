@@ -1,16 +1,13 @@
 const sketch = require('sketch')
 const UI = sketch.UI
-// const Image = sketch.Image
 const Settings = sketch.Settings
 const Style = sketch.Style
+const fetch = require('sketch-polyfill-fetch')
 
 export default function (context) {
   const API_KEY = 'bfd993ac8c14516588069b3fc664b216d0e20fb9b9fa35aa06fcc3ba6e0bc703'
   const API_ENDPOINT = 'https://api.unsplash.com'
   const action = '/photos/random'
-  const fetch = require('sketch-polyfill-fetch')
-  // TODO: show warning if no layer is selected
-  // TODO: fill multiple layers
   var s = sketch.getSelectedDocument().selectedLayers.layers[0]._object
 
   // orientation: landscape | portrait | squarish
@@ -45,7 +42,6 @@ function process (unsplashJSON) {
 
 // TODO: UI to ask the user for their API key
 // TODO: Name the layer? (Not sure that's a good idea, unless we can make it optional)
-// DONE: use the shape's orientation to request an appropriate image
 // TODO: use the shape's size to request an appropriately sized image
 // TODO: use SketchAPI for this
 function getImageDataFromURL (url) {
