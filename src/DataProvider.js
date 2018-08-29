@@ -55,11 +55,11 @@ function setImageFor (item, index, dataKey) {
 
 function process (unsplashJSON, dataKey, index, item) {
   let data = JSON.parse(unsplashJSON)[0]
-  console.log(data)
+  // console.log(data)
   let path = getImageFromURL(data.urls.regular)
   DataSupplier.supplyDataAtIndex(dataKey, path, index)
   // TODO: if layer belongs to a Symbol, we shouldn't set the data on the layer, but on the instance, storing a reference to the override to use it later
-  console.log(`We're setting an ID on ${item}`)
+  // console.log(`We're setting an ID on ${item}`)
   if (item.className() === 'MSDataOverride') {
     // let overrideID = item.overrideIdentifier()
   } else {
@@ -73,6 +73,7 @@ function getImageFromURL (url) {
   let request = NSURLRequest.requestWithURL(NSURL.URLWithString(url))
   let imageData = NSURLConnection.sendSynchronousRequest_returningResponse_error(request, null, null)
   if (imageData) {
+    // TODO: use imageData directly, once #19391 is implemented
     return saveTempFileFromImageData(imageData)
   } else {
     return context.plugin.urlForResourceNamed('placeholder.png').path()
