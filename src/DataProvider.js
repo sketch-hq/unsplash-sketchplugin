@@ -24,7 +24,7 @@ export function onSupplyPhoto (context) {
 
 function setImageFor (item, index, dataKey) {
   let layer
-  if (item.className() === 'MSDataOverride') {
+  if (item.className() == 'MSDataOverride') {
     layer = item.symbolInstance() // or item.affectedLayer(), but both of them are not really what we need… Check `MSOverrideRepresentation` to get the true size of the affected layer after being resized on the Symbol instance
   } else {
     layer = item
