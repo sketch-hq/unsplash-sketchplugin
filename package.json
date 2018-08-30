@@ -27,6 +27,8 @@
     "eslint-plugin-standard": "^4.0.0"
   },
   "author": "Bohemian Coding",
+  "repository": "https://github.com/BohemianCoding/unsplash-sketchplugin.git",
+  "description": "Easily grab images from Unsplash",
   "dependencies": {
     "sketch-polyfill-fetch": "^0.3.3"
   }

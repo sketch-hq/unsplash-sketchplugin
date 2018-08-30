@@ -1,6 +1,5 @@
 {
   "name": "Unsplash",
-  "description": "Easily grab images from Unsplash",
   "compatibleVersion": 3,
   "bundleVersion": 1,
   "icon": "icon.png",
