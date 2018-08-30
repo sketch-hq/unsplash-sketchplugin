@@ -6,11 +6,6 @@
   "suppliesData" : true,
   "commands": [
     {
-      "name": "Random Photo From Unsplash",
-      "identifier": "random-image",
-      "script": "./my-command.js"
-    },
-    {
       "name": "View Photo on Unsplash",
       "identifier": "image-details",
       "script": "./imageDetails.js"
