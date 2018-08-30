@@ -22,9 +22,27 @@ export function onSupplyPhoto (context) {
   items.forEach((item, index) => setImageFor(item, index, dataKey))
 }
 
+export default function onImageDetails (context) {
+  var selection = sketch.getSelectedDocument().selectedLayers
+  if (selection.length > 0) {
+    selection.forEach(element => {
+      var id = Settings.layerSettingForKey(element, 'unsplash.photo.id')
+      if (id) {
+        NSWorkspace.sharedWorkspace().openURL(NSURL.URLWithString(`https://unsplash.com/photos/${id}`))
+      } else {
+        // This layer doesn't have an Unsplash photo set, do nothing.
+        // Alternatively, show an explanation of what the user needs to do to make this work…
+        // UI.message(``)
+      }
+    })
+  } else {
+    UI.message(`Please select at least one layer`)
+  }
+}
+
 function setImageFor (item, index, dataKey) {
   let layer
-  if (item.className() == 'MSDataOverride') {
+  if (item.className().toString() === 'MSDataOverride') {
     layer = item.symbolInstance() // or item.affectedLayer(), but both of them are not really what we need… Check `MSOverrideRepresentation` to get the true size of the affected layer after being resized on the Symbol instance
   } else {
     layer = item

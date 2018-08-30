@@ -7,8 +7,11 @@
   "commands": [
     {
       "name": "View Photo on Unsplash",
-      "identifier": "image-details",
-      "script": "./imageDetails.js"
+      "identifier": "imageDetails",
+      "script": "DataProvider.js",
+      "handler": {
+          "run": "onImageDetails"
+      }
     },
     {
       "script" : "DataProvider.js",
@@ -24,7 +27,7 @@
   "menu": {
     "title": "Unsplash",
     "items": [
-        "image-details"
+        "imageDetails"
     ]
   }
 }
