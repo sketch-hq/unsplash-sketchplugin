@@ -1,6 +1,7 @@
 const API_KEY = 'bfd993ac8c14516588069b3fc664b216d0e20fb9b9fa35aa06fcc3ba6e0bc703'
 const API_ENDPOINT = 'https://api.unsplash.com'
 const action = '/photos/random'
+const collection_id = 317099 // Unsplash's curated collection
 
 const sketch = require('sketch')
 const DataSupplier = sketch.DataSupplier
@@ -58,7 +59,7 @@ function setImageFor (item, index, dataKey) {
   if (layer.frame().width() === layer.frame().height()) {
     orientation = 'squarish'
   }
-  let url = API_ENDPOINT + action + '?client_id=' + API_KEY + '&count=1&orientation=' + orientation
+  let url = API_ENDPOINT + action + '?client_id=' + API_KEY + '&count=1&orientation=' + orientation + '&collections=' + collection_id
 
   UI.message('🕑 Downloading…')
   let options = {
@@ -69,6 +70,7 @@ function setImageFor (item, index, dataKey) {
   fetch(url, options)
     .then(response => response.text())
     .then(text => process(text, dataKey, index, item))
+    .catch(e => console.log(e))
 }
 
 function process (unsplashJSON, dataKey, index, item) {
