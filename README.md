@@ -7,7 +7,7 @@
 
 ## Issues
 
-- We'll be effectively sharing our API key with the world. We need to double check with them that this is ok
-- TODO: View Photo does not work for overrides
-- TODO: use imageData directly once #19391 is implemented
-
+- [ ] Images with multiple bitmap fills don't work as expected
+- [ ] Show warning / help text when running the plugin on a layer that has no bitmap fill / is not supported
+- [ ] View Photo does not work for overrides
+- [ ] use imageData directly once #19391 is implemented
