@@ -1,7 +1,12 @@
 const API_KEY = 'bfd993ac8c14516588069b3fc664b216d0e20fb9b9fa35aa06fcc3ba6e0bc703'
 const API_ENDPOINT = 'https://api.unsplash.com'
 const action = '/photos/random'
-const collection_id = 317099 // Unsplash's curated collection
+const collectionId = 317099 // Unsplash's curated collection
+const apiOptions = {
+  'headers': {
+    'app-pragma': 'no-cache'
+  }
+}
 
 const sketch = require('sketch')
 const DataSupplier = sketch.DataSupplier
@@ -59,15 +64,10 @@ function setImageFor (item, index, dataKey) {
   if (layer.frame().width() === layer.frame().height()) {
     orientation = 'squarish'
   }
-  let url = API_ENDPOINT + action + '?client_id=' + API_KEY + '&count=1&orientation=' + orientation + '&collections=' + collection_id
+  let url = API_ENDPOINT + action + '?client_id=' + API_KEY + '&count=1&orientation=' + orientation + '&collections=' + collectionId
 
   UI.message('🕑 Downloading…')
-  let options = {
-    'headers': {
-      'app-pragma': 'no-cache'
-    }
-  }
-  fetch(url, options)
+  fetch(url, apiOptions)
     .then(response => response.text())
     .then(text => process(text, dataKey, index, item))
     .catch(e => console.log(e))
@@ -77,6 +77,7 @@ function process (unsplashJSON, dataKey, index, item) {
   let data = JSON.parse(unsplashJSON)[0]
   // console.log(data)
   let path = getImageFromURL(data.urls.regular)
+  let downloadLocation = data.links.download_location + '?client_id=' + API_KEY
   DataSupplier.supplyDataAtIndex(dataKey, path, index)
   // TODO if layer belongs to a Symbol, we shouldn't set the data on the layer, but on the instance, storing a reference to the override to use it later
   // console.log(`We're setting an ID on ${item}`)
@@ -86,7 +87,9 @@ function process (unsplashJSON, dataKey, index, item) {
     // This is a regular layer
     Settings.setLayerSettingForKey(item, 'unsplash.photo.id', data.id)
   }
-  UI.message('📷 by ' + data.user.name + ' on Unsplash')
+  fetch(downloadLocation, apiOptions)
+    .then(UI.message('📷 by ' + data.user.name + ' on Unsplash'))
+    .catch(e => console.log(e))
 }
 
 function getImageFromURL (url) {
