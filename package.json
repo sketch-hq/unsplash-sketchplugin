@@ -30,6 +30,7 @@
   "repository": "https://github.com/BohemianCoding/unsplash-sketchplugin.git",
   "description": "Easily grab images from Unsplash",
   "dependencies": {
+    "@skpm/fs": "^0.2.0",
     "sketch-polyfill-fetch": "^0.3.5"
   }
 }
