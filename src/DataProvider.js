@@ -42,7 +42,7 @@ export default function onImageDetails () {
   var selection = sketch.getSelectedDocument().selectedLayers
   if (selection.length > 0) {
     selection.forEach(element => {
-      var id = Settings.layerSettingForKey(element, SETTING_KEY) || (
+      const id = Settings.layerSettingForKey(element, SETTING_KEY) || (
         element.type === 'SymbolInstance' &&
         element.overrides
           .map(o => Settings.layerSettingForKey(o, SETTING_KEY))
@@ -85,15 +85,13 @@ function setImageFor (item, index, dataKey) {
   UI.message('🕑 Downloading…')
   fetch(url, apiOptions)
     .then(response => response.json())
-    .then(json => process(json, dataKey, index, item))
-    .catch(e => console.log(e))
+    .then(json => process(json[0], dataKey, index, item))
+    .catch(e => console.error(e))
 }
 
-function process (unsplashJSON, dataKey, index, item) {
-  let data = unsplashJSON[0]
-
+function process (data, dataKey, index, item) {
   // supply the data
-  getImageFromURL(data.urls.regular).then(imagePath => {
+  return getImageFromURL(data.urls.regular).then(imagePath => {
     if (!imagePath) {
       // TODO: something wrong happened, show something to the user
       return
@@ -105,9 +103,8 @@ function process (unsplashJSON, dataKey, index, item) {
 
     // show the name of the photographer
     let downloadLocation = data.links.download_location + '?client_id=' + API_KEY
-    fetch(downloadLocation, apiOptions)
+    return fetch(downloadLocation, apiOptions)
       .then(UI.message('📷 by ' + data.user.name + ' on Unsplash'))
-      .catch(e => console.log(e))
   })
 }
 
