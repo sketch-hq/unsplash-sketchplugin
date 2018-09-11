@@ -63,6 +63,12 @@ export default function onImageDetails () {
 
 function setImageFor (item, index, dataKey) {
   let layer
+  if (!item.type) {
+    // if we get an unknown item, it means that we have a layer that is not yet
+    // recognized by the API (probably an MSOvalShape or something)
+    // force cast it to a Shape
+    item = sketch.Shape.fromNative(item.sketchObject)
+  }
   if (item.type === 'DataOverride') {
     layer = item.symbolInstance // or item.override.affectedLayer, but both of them are not really what we need… Check `MSOverrideRepresentation` to get the true size of the affected layer after being resized on the Symbol instance
   } else {
