@@ -53,7 +53,7 @@ export default function onImageDetails () {
       } else {
         // This layer doesn't have an Unsplash photo set, do nothing.
         // Alternatively, show an explanation of what the user needs to do to make this work…
-        // UI.message(``)
+        UI.message(`To get a random photo, click Data › Unsplash Random Photo in the toolbar, or right click the layer › Data Feeds › Unsplash Random Photo`)
       }
     })
   } else {
