@@ -19,7 +19,8 @@
         "actions" : {
           "Startup" : "onStartup",
           "Shutdown" : "onShutdown",
-          "SupplyPhoto" : "onSupplyPhoto"
+          "SupplyRandomPhoto" : "onSupplyRandomPhoto",
+          "SearchPhoto" : "onSearchPhoto"
         }
       }
     }

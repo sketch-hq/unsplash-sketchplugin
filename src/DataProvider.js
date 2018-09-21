@@ -20,7 +20,8 @@ const SETTING_KEY = 'unsplash.photo.id'
 const FOLDER = path.join(os.tmpdir(), 'com.sketchapp.unsplash-plugin')
 
 export function onStartup () {
-  DataSupplier.registerDataSupplier('public.image', 'Unsplash Random Photo', 'SupplyPhoto')
+  DataSupplier.registerDataSupplier('public.image', 'Unsplash Random Photo', 'SupplyRandomPhoto')
+  DataSupplier.registerDataSupplier('public.image', 'Unsplash Search Photo…', 'SearchPhoto')
 }
 
 export function onShutdown () {
@@ -32,10 +33,17 @@ export function onShutdown () {
   }
 }
 
-export function onSupplyPhoto (context) {
+export function onSupplyRandomPhoto (context) {
   let dataKey = context.data.key
   const items = util.toArray(context.data.items).map(sketch.fromNative)
   items.forEach((item, index) => setImageFor(item, index, dataKey))
+}
+
+export function onSearchPhoto (context) {
+  let dataKey = context.data.key
+  let searchTerm = UI.getStringFromUser('Search Unsplash for…', 'People')
+  const items = util.toArray(context.data.items).map(sketch.fromNative)
+  items.forEach((item, index) => setImageFor(item, index, dataKey, searchTerm))
 }
 
 export default function onImageDetails () {
@@ -61,7 +69,7 @@ export default function onImageDetails () {
   }
 }
 
-function setImageFor (item, index, dataKey) {
+function setImageFor (item, index, dataKey, searchTerm) {
   let layer
   if (!item.type) {
     // if we get an unknown item, it means that we have a layer that is not yet
@@ -86,7 +94,12 @@ function setImageFor (item, index, dataKey) {
     orientation = 'squarish'
   }
 
-  let url = API_ENDPOINT + action + '?client_id=' + API_KEY + '&count=1&orientation=' + orientation + '&collections=' + collectionId
+  let url = API_ENDPOINT + action + '?client_id=' + API_KEY + '&count=1&orientation=' + orientation
+  if (searchTerm) {
+    url += '&query=' + searchTerm
+  } else {
+    url += '&collections=' + collectionId
+  }
 
   UI.message('🕑 Downloading…')
   fetch(url, apiOptions)
