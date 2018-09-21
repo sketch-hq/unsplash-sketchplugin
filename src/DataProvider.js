@@ -42,8 +42,10 @@ export function onSupplyRandomPhoto (context) {
 export function onSearchPhoto (context) {
   let dataKey = context.data.key
   let searchTerm = UI.getStringFromUser('Search Unsplash for…', 'People')
-  const items = util.toArray(context.data.items).map(sketch.fromNative)
-  items.forEach((item, index) => setImageFor(item, index, dataKey, searchTerm))
+  if (searchTerm != 'null') {
+    const items = util.toArray(context.data.items).map(sketch.fromNative)
+    items.forEach((item, index) => setImageFor(item, index, dataKey, searchTerm))
+  }
 }
 
 export default function onImageDetails () {
