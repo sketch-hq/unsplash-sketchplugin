@@ -104,8 +104,18 @@ function setImageFor (item, index, dataKey, searchTerm) {
   UI.message('🕑 Downloading…')
   fetch(url, apiOptions)
     .then(response => response.json())
-    .then(json => process(json[0], dataKey, index, item))
-    .catch(e => console.error(e))
+    .then(json => {
+      if (json.errors) {
+        return Promise.reject(json.errors[0])
+      } else {
+        return json[0]
+      }
+    })
+    .then(json => process(json, dataKey, index, item))
+    .catch(e => {
+      UI.message(e)
+      console.error(e)
+    })
 }
 
 function process (data, dataKey, index, item) {
