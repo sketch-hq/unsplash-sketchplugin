@@ -1,5 +1,6 @@
 # build artifacts
 unsplash.sketchplugin
+*.zip
 
 # npm
 node_modules
