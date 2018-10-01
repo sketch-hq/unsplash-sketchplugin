@@ -2,7 +2,7 @@
 
 ## Features
 
-Get random images from Unsplash, using Sketch 52’s new Data Supplier feature.
+Get images from Unsplash, using Sketch 52’s new Data Supplier feature.
 
 You can use it from the toolbar Data icon…
 

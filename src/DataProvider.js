@@ -129,8 +129,10 @@ function process (data, dataKey, index, item) {
     }
     DataSupplier.supplyDataAtIndex(dataKey, imagePath, index)
 
-    // store where the image comes from
-    Settings.setLayerSettingForKey(item, SETTING_KEY, data.id)
+    // store where the image comes from, but only if this is a regular layer
+    if (item.type != 'DataOverride') {
+      Settings.setLayerSettingForKey(item, SETTING_KEY, data.id)
+    }
 
     // show the name of the photographer
     let downloadLocation = data.links.download_location + '?client_id=' + API_KEY
