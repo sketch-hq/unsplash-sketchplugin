@@ -20,8 +20,8 @@ const SETTING_KEY = 'unsplash.photo.id'
 const FOLDER = path.join(os.tmpdir(), 'com.sketchapp.unsplash-plugin')
 
 export function onStartup () {
-  DataSupplier.registerDataSupplier('public.image', 'Unsplash Random Photo', 'SupplyRandomPhoto')
-  DataSupplier.registerDataSupplier('public.image', 'Unsplash Search Photo…', 'SearchPhoto')
+  DataSupplier.registerDataSupplier('public.image', 'Random Photo', 'SupplyRandomPhoto')
+  DataSupplier.registerDataSupplier('public.image', 'Search Photo…', 'SearchPhoto')
 }
 
 export function onShutdown () {
@@ -41,7 +41,7 @@ export function onSupplyRandomPhoto (context) {
 
 export function onSearchPhoto (context) {
   let dataKey = context.data.key
-  let searchTerm = UI.getStringFromUser('Search Unsplash for…', 'People')
+  let searchTerm = UI.getStringFromUser('Search Unsplash for…', 'People').replace(' ', '-').toLowerCase()
   if (searchTerm != 'null') {
     const items = util.toArray(context.data.items).map(sketch.fromNative)
     items.forEach((item, index) => setImageFor(item, index, dataKey, searchTerm))
