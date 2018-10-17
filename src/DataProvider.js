@@ -115,7 +115,7 @@ function setImageFor (item, index, dataKey, searchTerm) {
     })
     .then(json => process(json, dataKey, index, item))
     .catch(e => {
-      UI.message(e)
+      UI.message('There was an error connecting to Unsplash')
       console.error(e)
     })
 }
