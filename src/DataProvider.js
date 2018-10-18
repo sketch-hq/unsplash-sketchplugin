@@ -6,7 +6,6 @@ const sketch = require('sketch')
 
 const API_KEY = 'bfd993ac8c14516588069b3fc664b216d0e20fb9b9fa35aa06fcc3ba6e0bc703'
 const API_ENDPOINT = 'https://api.unsplash.com'
-const action = '/photos/random'
 const collectionId = 317099 // Unsplash's curated collection
 const apiOptions = {
   'headers': {
@@ -33,25 +32,41 @@ export function onShutdown () {
   }
 }
 
-function setImageForContext (context, ...params) {
-  const dataKey = context.data.key
-  const items = util.toArray(context.data.items).map(sketch.fromNative)
-  items.forEach((item, index) => setImageFor(item, index, dataKey, ...params))
-}
-
 export function onSupplyRandomPhoto (context) {
   setImageForContext(context)
 }
 
+function containsPhotoId (searchTerm) {
+  return searchTerm.substr(0, 3) === 'id:' || searchTerm.indexOf('unsplash.com/photos/') !== -1
+}
+
+function extractPhotoId (searchTerm) {
+  if (searchTerm.substr(0, 3) === 'id:') {
+    return searchTerm.substr(3)
+  }
+
+  // Extract photoId from a "unsplash.com/photos/<photoId>" URL
+  // Allows a URL with or without http/https
+  // It also strips out anything after the photoId
+  let photoId = searchTerm.substr(searchTerm.indexOf('unsplash.com/photos/') + 20)
+  const artifactLocation = photoId.search(/[^a-z0-9_-]/i)
+  return artifactLocation !== -1 ? photoId.substr(0, artifactLocation) : photoId
+}
+
 export function onSearchPhoto (context) {
-  const searchTerm = UI.getStringFromUser('Search Unsplash for…', 'People').replace(' ', '-').toLowerCase()
-  if (searchTerm != 'null') {
-    setImageForContext(context, searchTerm)
+  const searchTerm = UI.getStringFromUser('Search Unsplash for…', 'People').trim()
+  if (searchTerm !== 'null') {
+    if (containsPhotoId(searchTerm)) {
+      setImageForContext(context, null, extractPhotoId(searchTerm))
+    } else {
+      setImageForContext(context, searchTerm.replace(' ', '-').toLowerCase())
+    }
   }
 }
 
 export default function onImageDetails () {
-  const selection = sketch.getSelectedDocument().selectedLayers
+  const selectedDocument = sketch.getSelectedDocument()
+  const selection = selectedDocument ? selectedDocument.selectedLayers : []
   if (selection.length > 0) {
     selection.forEach(element => {
       const id = Settings.layerSettingForKey(element, SETTING_KEY) || (
@@ -73,7 +88,13 @@ export default function onImageDetails () {
   }
 }
 
-function setImageFor (item, index, dataKey, searchTerm) {
+function setImageForContext (context, ...params) {
+  const dataKey = context.data.key
+  const items = util.toArray(context.data.items).map(sketch.fromNative)
+  items.forEach((item, index) => setImageFor(item, index, dataKey, ...params))
+}
+
+function setImageFor (item, index, dataKey, searchTerm, photoId) {
   let layer
   if (!item.type) {
     // if we get an unknown item, it means that we have a layer that is not yet
@@ -98,11 +119,14 @@ function setImageFor (item, index, dataKey, searchTerm) {
     orientation = 'squarish'
   }
 
+  let action = photoId ? `/photos/${photoId}` : '/photos/random'
   let url = API_ENDPOINT + action + '?client_id=' + API_KEY + '&count=1&orientation=' + orientation
-  if (searchTerm) {
-    url += '&query=' + searchTerm
-  } else {
-    url += '&collections=' + collectionId
+  if (!photoId) {
+    if (searchTerm) {
+      url += '&query=' + searchTerm
+    } else {
+      url += '&collections=' + collectionId
+    }
   }
 
   UI.message('🕑 Downloading…')
@@ -111,6 +135,8 @@ function setImageFor (item, index, dataKey, searchTerm) {
     .then(json => {
       if (json.errors) {
         return Promise.reject(json.errors[0])
+      } else if (typeof json.id !== 'undefined') {
+        return json
       } else {
         return json[0]
       }
@@ -132,7 +158,7 @@ function process (data, dataKey, index, item) {
     DataSupplier.supplyDataAtIndex(dataKey, imagePath, index)
 
     // store where the image comes from, but only if this is a regular layer
-    if (item.type != 'DataOverride') {
+    if (item.type !== 'DataOverride') {
       Settings.setLayerSettingForKey(item, SETTING_KEY, data.id)
     }
 
