@@ -33,23 +33,25 @@ export function onShutdown () {
   }
 }
 
-export function onSupplyRandomPhoto (context) {
-  let dataKey = context.data.key
+function setImageForContext (context, ...params) {
+  const dataKey = context.data.key
   const items = util.toArray(context.data.items).map(sketch.fromNative)
-  items.forEach((item, index) => setImageFor(item, index, dataKey))
+  items.forEach((item, index) => setImageFor(item, index, dataKey, ...params))
+}
+
+export function onSupplyRandomPhoto (context) {
+  setImageForContext(context)
 }
 
 export function onSearchPhoto (context) {
-  let dataKey = context.data.key
-  let searchTerm = UI.getStringFromUser('Search Unsplash for…', 'People').replace(' ', '-').toLowerCase()
+  const searchTerm = UI.getStringFromUser('Search Unsplash for…', 'People').replace(' ', '-').toLowerCase()
   if (searchTerm != 'null') {
-    const items = util.toArray(context.data.items).map(sketch.fromNative)
-    items.forEach((item, index) => setImageFor(item, index, dataKey, searchTerm))
+    setImageForContext(context, searchTerm)
   }
 }
 
 export default function onImageDetails () {
-  var selection = sketch.getSelectedDocument().selectedLayers
+  const selection = sketch.getSelectedDocument().selectedLayers
   if (selection.length > 0) {
     selection.forEach(element => {
       const id = Settings.layerSettingForKey(element, SETTING_KEY) || (
