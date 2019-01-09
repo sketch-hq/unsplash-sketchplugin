@@ -42,7 +42,7 @@ export function onSupplyRandomPhoto (context) {
 export function onSearchPhoto (context) {
   let dataKey = context.data.key
   let searchTerm = UI.getStringFromUser('Search Unsplash for…', 'People').replace(' ', '-').toLowerCase()
-  if (searchTerm != 'null') {
+  if (searchTerm !== 'null') {
     const items = util.toArray(context.data.items).map(sketch.fromNative)
     items.forEach((item, index) => setImageFor(item, index, dataKey, searchTerm))
   }
@@ -130,7 +130,7 @@ function process (data, dataKey, index, item) {
     DataSupplier.supplyDataAtIndex(dataKey, imagePath, index)
 
     // store where the image comes from, but only if this is a regular layer
-    if (item.type != 'DataOverride') {
+    if (item.type !== 'DataOverride') {
       Settings.setLayerSettingForKey(item, SETTING_KEY, data.id)
     }
 
