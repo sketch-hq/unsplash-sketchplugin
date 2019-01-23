@@ -27,7 +27,9 @@ export function onStartup () {
 export function onShutdown () {
   DataSupplier.deregisterDataSuppliers()
   try {
-    fs.rmdirSync(FOLDER)
+    if (fs.existsSync(FOLDER)) {
+      fs.rmdirSync(FOLDER)
+    }
   } catch (err) {
     console.error(err)
   }
