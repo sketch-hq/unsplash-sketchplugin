@@ -28,4 +28,4 @@ If you don't want a random photo, but a specific one, you can do a search in uns
 
 To do that, select the "Search Photo…" option then in the input field paste in an Unsplash photo URL. If you'd rather use the ID of the image, you can do that by entering `id:photo_id` as the search term.
 
-(Thanks https://github.com/patrickdaze for this feature :)
+(Thanks <https://github.com/patrickdaze> for this feature :)
