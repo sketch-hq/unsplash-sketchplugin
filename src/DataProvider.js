@@ -59,7 +59,7 @@ export function onSearchPhoto (context) {
     if (containsPhotoId(searchTerm)) {
       setImageForContext(context, null, extractPhotoId(searchTerm))
     } else {
-      setImageForContext(context, searchTerm.replace(' ', '-').toLowerCase())
+      setImageForContext(context, searchTerm.replace(/\s+/g, '-').toLowerCase())
     }
   }
 }
