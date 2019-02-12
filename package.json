@@ -1,6 +1,6 @@
 {
   "name": "unsplash",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "engines": {
     "sketch": ">=3.0"
   },
