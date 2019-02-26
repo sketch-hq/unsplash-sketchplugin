@@ -3,15 +3,7 @@ const path = require('path')
 const util = require('util')
 const fs = require('@skpm/fs')
 const sketch = require('sketch')
-
-const API_KEY = 'bfd993ac8c14516588069b3fc664b216d0e20fb9b9fa35aa06fcc3ba6e0bc703'
-const API_ENDPOINT = 'https://api.unsplash.com'
-const collectionId = 317099 // Unsplash's curated collection
-const apiOptions = {
-  'headers': {
-    'app-pragma': 'no-cache'
-  }
-}
+const { getImagesURLsForItems } = require('./unsplash')
 
 const { DataSupplier, UI, Settings } = sketch
 
@@ -102,60 +94,20 @@ export default function onImageDetails () {
   }
 }
 
-function setImageForContext (context, ...params) {
+function setImageForContext (context, searchTerm, photoId) {
   const dataKey = context.data.key
   const items = util.toArray(context.data.items).map(sketch.fromNative)
-  items.forEach((item, index) => setImageFor(item, index, dataKey, ...params))
-}
-
-function setImageFor (item, index, dataKey, searchTerm, photoId) {
-  let layer
-  if (!item.type) {
-    // if we get an unknown item, it means that we have a layer that is not yet
-    // recognized by the API (probably an MSOvalShape or something)
-    // force cast it to a Shape
-    item = sketch.Shape.fromNative(item.sketchObject)
-  }
-  if (item.type === 'DataOverride') {
-    layer = item.symbolInstance // or item.override.affectedLayer, but both of them are not really what we need… Check `MSOverrideRepresentation` to get the true size of the affected layer after being resized on the Symbol instance
-  } else {
-    layer = item
-  }
-
-  let orientation
-  if (layer.frame.width > layer.frame.height) {
-    orientation = 'landscape'
-  }
-  if (layer.frame.width < layer.frame.height) {
-    orientation = 'portrait'
-  }
-  if (layer.frame.width === layer.frame.height) {
-    orientation = 'squarish'
-  }
-
-  let action = photoId ? `/photos/${photoId}` : '/photos/random'
-  let url = API_ENDPOINT + action + '?client_id=' + API_KEY + '&count=1&orientation=' + orientation
-  if (!photoId) {
-    if (searchTerm) {
-      url += '&query=' + searchTerm
-    } else {
-      url += '&collections=' + collectionId
-    }
-  }
 
   UI.message('🕑 Downloading…')
-  fetch(url, apiOptions)
-    .then(response => response.json())
-    .then(json => {
-      if (json.errors) {
-        return Promise.reject(json.errors[0])
-      } else if (typeof json.id !== 'undefined') {
-        return json
+  getImagesURLsForItems(items, { searchTerm, photoId })
+    .then(res => Promise.all(res.map(({ data, item, index, error }) => {
+      if (error) {
+        UI.message(error)
+        console.error(error)
       } else {
-        return json[0]
+        process(data, dataKey, index, item)
       }
-    })
-    .then(json => process(json, dataKey, index, item))
+    })))
     .catch(e => {
       UI.message(e)
       console.error(e)
@@ -176,10 +128,7 @@ function process (data, dataKey, index, item) {
       Settings.setLayerSettingForKey(item, SETTING_KEY, data.id)
     }
 
-    // show the name of the photographer
-    let downloadLocation = data.links.download_location + '?client_id=' + API_KEY
-    return fetch(downloadLocation, apiOptions)
-      .then(UI.message('📷 by ' + data.user.name + ' on Unsplash'))
+    UI.message('📷 by ' + data.user.name + ' on Unsplash')
   })
 }
 
