@@ -100,12 +100,12 @@ function setImageForContext (context, searchTerm, photoId) {
 
   UI.message('🕑 Downloading…')
   getImagesURLsForItems(items, { searchTerm, photoId })
-    .then(res => Promise.all(res.map(({ data, item, index, error }) => {
+    .then(res => Promise.all(res.map(({ data, item, index, frame, error }) => {
       if (error) {
         UI.message(error)
         console.error(error)
       } else {
-        process(data, dataKey, index, item)
+        process(data, dataKey, index, item, frame)
       }
     })))
     .catch(e => {
@@ -114,9 +114,9 @@ function setImageForContext (context, searchTerm, photoId) {
     })
 }
 
-function process (data, dataKey, index, item) {
+function process (data, dataKey, index, item, frame) {
   // supply the data
-  return getImageFromURL(data.urls.regular).then(imagePath => {
+  return getImageFromURL(data.urls.full, frame).then(imagePath => {
     if (!imagePath) {
       // TODO: something wrong happened, show something to the user
       return
@@ -132,8 +132,8 @@ function process (data, dataKey, index, item) {
   })
 }
 
-function getImageFromURL (url) {
-  return fetch(url)
+function getImageFromURL (url, frame) {
+  return fetch(`${url}&fit=min&w=${frame.width}&h=${frame.height}`)
     .then(res => res.blob())
     // TODO: use imageData directly, once #19391 is implemented
     .then(saveTempFileFromImageData)
