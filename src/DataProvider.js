@@ -56,8 +56,20 @@ function extractPhotoId (searchTerm) {
 }
 
 export function onSearchPhoto (context) {
-  const searchTerm = UI.getStringFromUser('Search Unsplash for…', 'People').trim()
+  // 21123: retrieve previous search term. If multiple layers are selected, find the first search term
+  // in the group…
+  let selectedLayers = sketch.getSelectedDocument().selectedLayers.layers
+  let previousTerms = selectedLayers.map(layer => Settings.layerSettingForKey(layer, 'unsplash.search.term'))
+  let firstPreviousTerm = previousTerms.find(term => term !== undefined)
+  let previousTerm = firstPreviousTerm || 'People'
+  // TODO: use `UI.getInputFromUser`
+  // TODO: do not perform search if user hits Cancel
+  // TODO: support multiple selected layers with different search terms for each
+  const searchTerm = UI.getStringFromUser('Search Unsplash for…', previousTerm).trim()
   if (searchTerm !== 'null') {
+    selectedLayers.forEach(layer => {
+      Settings.setLayerSettingForKey(layer, 'unsplash.search.term', searchTerm)
+    })
     if (containsPhotoId(searchTerm)) {
       setImageForContext(context, null, extractPhotoId(searchTerm))
     } else {
@@ -82,7 +94,7 @@ export default function onImageDetails () {
       } else {
         // This layer doesn't have an Unsplash photo set, do nothing.
         // Alternatively, show an explanation of what the user needs to do to make this work…
-        UI.message(`To get a random photo, click Data › Unsplash Random Photo in the toolbar, or right click the layer › Data Feeds › Unsplash Random Photo`)
+        UI.message(`To get a random photo, click Data › Unsplash › Random Photo in the toolbar, or right click the layer › Data Feeds › Unsplash › Random Photo`)
       }
     })
   } else {
