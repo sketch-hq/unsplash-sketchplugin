@@ -133,7 +133,7 @@ function process (data, dataKey, index, item, frame) {
 }
 
 function getImageFromURL (url, frame) {
-  return fetch(`${url}&fit=min&w=${frame.width}&h=${frame.height}`)
+  return fetch(`${url}&dpi=2&fit=min&w=${frame.width}&h=${frame.height}`)
     .then(res => res.blob())
     // TODO: use imageData directly, once #19391 is implemented
     .then(saveTempFileFromImageData)
