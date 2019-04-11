@@ -59,6 +59,7 @@ export function getImagesURLsForItems (items, { searchTerm, photoId }) {
     }
 
     // we can only request 30 photos max at a time
+    // (from https://unsplash.com/documentation#pagination)
     const numberOfRequests = Math.ceil(itemsForOrientation.length / 30)
 
     return Promise.all(Array(numberOfRequests).fill().map((_, i) => {
