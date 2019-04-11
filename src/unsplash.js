@@ -2,7 +2,6 @@ const sketch = require('sketch')
 
 const API_KEY = 'bfd993ac8c14516588069b3fc664b216d0e20fb9b9fa35aa06fcc3ba6e0bc703'
 const API_ENDPOINT = 'https://api.unsplash.com'
-const collectionId = 317099 // Unsplash's curated collection
 const apiOptions = {
   'headers': {
     'app-pragma': 'no-cache'
@@ -47,8 +46,6 @@ export function getImagesURLsForItems (items, { searchTerm, photoId }) {
   if (!photoId) {
     if (searchTerm) {
       url += '&query=' + searchTerm
-    } else {
-      url += '&collections=' + collectionId
     }
   }
 
