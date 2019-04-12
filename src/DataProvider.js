@@ -54,19 +54,36 @@ export function onSearchPhoto (context) {
   let previousTerms = selectedLayers.map(layer => Settings.layerSettingForKey(layer, 'unsplash.search.term'))
   let firstPreviousTerm = previousTerms.find(term => term !== undefined)
   let previousTerm = firstPreviousTerm || 'People'
-  // TODO: use `UI.getInputFromUser`
-  // TODO: do not perform search if user hits Cancel
   // TODO: support multiple selected layers with different search terms for each
-  const searchTerm = UI.getStringFromUser('Search Unsplash for…', previousTerm).trim()
-  if (searchTerm !== 'null') {
-    selectedLayers.forEach(layer => {
-      Settings.setLayerSettingForKey(layer, 'unsplash.search.term', searchTerm)
-    })
-    if (containsPhotoId(searchTerm)) {
-      setImageForContext(context, null, extractPhotoId(searchTerm))
-    } else {
-      setImageForContext(context, searchTerm.replace(/\s+/g, '-').toLowerCase())
+  if (sketch.version.sketch < 53) {
+    const searchTerm = UI.getStringFromUser('Search Unsplash for…', previousTerm).trim()
+    if (searchTerm !== 'null') {
+      selectedLayers.forEach(layer => {
+        Settings.setLayerSettingForKey(layer, 'unsplash.search.term', searchTerm)
+      })
+      if (containsPhotoId(searchTerm)) {
+        setImageForContext(context, null, extractPhotoId(searchTerm))
+      } else {
+        setImageForContext(context, searchTerm.replace(/\s+/g, '-').toLowerCase())
+      }
     }
+  } else {
+    UI.getInputFromUser('Search Unsplash for…',
+      { initialValue: previousTerm },
+      (err, searchTerm) => {
+        if (err) { return } // user hit cancel
+        if ((searchTerm = searchTerm.trim()) !== 'null') {
+          selectedLayers.forEach(layer => {
+            Settings.setLayerSettingForKey(layer, 'unsplash.search.term', searchTerm)
+          })
+          if (containsPhotoId(searchTerm)) {
+            setImageForContext(context, null, extractPhotoId(searchTerm))
+          } else {
+            setImageForContext(context, searchTerm.replace(/\s+/g, '-').toLowerCase())
+          }
+        }
+      }
+    )
   }
 }
 
