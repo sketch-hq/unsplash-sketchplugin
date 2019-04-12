@@ -1,5 +1,6 @@
+/* globals CGPathGetBoundingBox */
 const sketch = require('sketch')
-
+const { toArray } = require('util')
 const API_KEY = 'bfd993ac8c14516588069b3fc664b216d0e20fb9b9fa35aa06fcc3ba6e0bc703'
 const API_ENDPOINT = 'https://api.unsplash.com'
 const apiOptions = {
@@ -22,17 +23,42 @@ export function getImagesURLsForItems (items, { searchTerm, photoId }) {
     }
     let layer
     if (item.type === 'DataOverride') {
-      layer = item.symbolInstance // or item.override.affectedLayer, but both of them are not really what we need… Check `MSOverrideRepresentation` to get the true size of the affected layer after being resized on the Symbol instance
+      // only available on Sketch 54+
+      const overrideFrame = item.override.getFrame && item.override.getFrame()
+      if (overrideFrame) {
+        layer = {
+          frame: overrideFrame
+        }
+      } else {
+        const overrideRepresentation = toArray(
+          item.symbolInstance.sketchObject.overrideContainer().flattenedChildren()
+        ).find(
+          // eslint-disable-next-line eqeqeq
+          x => x.availableOverride() == item.override.sketchObject
+        )
+        if (!overrideRepresentation) {
+          layer = item.symbolInstance
+        } else {
+          const path = overrideRepresentation.pathInInstance()
+          const bounds = CGPathGetBoundingBox(path)
+          layer = {
+            frame: {
+              width: Number(bounds.size.width),
+              height: Number(bounds.size.height)
+            }
+          }
+        }
+      }
     } else {
       layer = item
     }
 
     if (layer.frame.width > layer.frame.height) {
-      prev.landscape.push({ item, index })
+      prev.landscape.push({ item, index, frame: layer.frame })
     } else if (layer.frame.width < layer.frame.height) {
-      prev.portrait.push({ item, index })
+      prev.portrait.push({ item, index, frame: layer.frame })
     } else if (layer.frame.width === layer.frame.height) {
-      prev.squarish.push({ item, index })
+      prev.squarish.push({ item, index, frame: layer.frame })
     }
     return prev
   }, {
