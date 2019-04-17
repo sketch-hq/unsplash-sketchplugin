@@ -95,6 +95,11 @@ export function getImagesURLsForItems (items, { searchTerm, photoId }) {
           if (json.errors) {
             return Promise.reject(json.errors[0])
           }
+          if (!Array.isArray(json)) {
+            // must have been a photoId search,
+            // fill an array we can iterate over
+            json = new Array(count).fill(json)
+          }
           return json.map((data, j) => ({
             data,
             ...itemsForOrientation[30 * i + j]
