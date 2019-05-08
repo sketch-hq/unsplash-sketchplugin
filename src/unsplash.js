@@ -85,11 +85,12 @@ export function getImagesURLsForItems (items, { searchTerm, photoId }) {
       }).catch(error => {
         return [{ error }]
       })
-  } else if (!photoId) {
-    if (searchTerm) {
-      url += '&query=' + searchTerm
-    }
   }
+  
+  if (searchTerm) {
+    url += '&query=' + searchTerm
+  }
+
 
   return Promise.all(Object.keys(orientations).map(orientation => {
     const itemsForOrientation = orientations[orientation]
