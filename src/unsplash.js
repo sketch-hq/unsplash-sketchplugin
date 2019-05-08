@@ -69,7 +69,23 @@ export function getImagesURLsForItems (items, { searchTerm, photoId }) {
 
   let action = photoId ? `/photos/${photoId}` : '/photos/random'
   let url = API_ENDPOINT + action + '?client_id=' + API_KEY
-  if (!photoId) {
+
+  if (photoId) {
+    return fetch(url, apiOptions)
+      .then(response => response.json())
+      .then(json => {
+        if (json.errors) {
+          return Promise.reject(json.errors[0])
+        }
+        json = new Array(items.length).fill(json)
+        return json.map((data, j) => ({
+          data,
+          ...flatten(Object.values(orientations))[j]
+        }))
+      }).catch(error => {
+        return [{ error }]
+      })
+  } else if (!photoId) {
     if (searchTerm) {
       url += '&query=' + searchTerm
     }
@@ -94,11 +110,6 @@ export function getImagesURLsForItems (items, { searchTerm, photoId }) {
         .then(json => {
           if (json.errors) {
             return Promise.reject(json.errors[0])
-          }
-          if (!Array.isArray(json)) {
-            // must have been a photoId search,
-            // fill an array we can iterate over
-            json = new Array(count).fill(json)
           }
           return json.map((data, j) => ({
             data,
