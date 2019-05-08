@@ -69,11 +69,28 @@ export function getImagesURLsForItems (items, { searchTerm, photoId }) {
 
   let action = photoId ? `/photos/${photoId}` : '/photos/random'
   let url = API_ENDPOINT + action + '?client_id=' + API_KEY
-  if (!photoId) {
-    if (searchTerm) {
-      url += '&query=' + searchTerm
-    }
+
+  if (photoId) {
+    return fetch(url, apiOptions)
+      .then(response => response.json())
+      .then(json => {
+        if (json.errors) {
+          return Promise.reject(json.errors[0])
+        }
+        json = new Array(items.length).fill(json)
+        return json.map((data, j) => ({
+          data,
+          ...flatten(Object.values(orientations))[j]
+        }))
+      }).catch(error => {
+        return [{ error }]
+      })
   }
+  
+  if (searchTerm) {
+    url += '&query=' + searchTerm
+  }
+
 
   return Promise.all(Object.keys(orientations).map(orientation => {
     const itemsForOrientation = orientations[orientation]
