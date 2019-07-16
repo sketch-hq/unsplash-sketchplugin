@@ -25,7 +25,7 @@
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
-    "lodash": ">=4.17.11"
+    "lodash": ">=4.17.13"
   },
   "author": "Sketch",
   "repository": "https://github.com/BohemianCoding/unsplash-sketchplugin.git",
