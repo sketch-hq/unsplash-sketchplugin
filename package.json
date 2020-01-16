@@ -29,7 +29,7 @@
     "serialize-javascript": ">=2.1.1"
   },
   "author": "Sketch",
-  "repository": "https://github.com/BohemianCoding/unsplash-sketchplugin.git",
+  "repository": "https://github.com/sketch-hq/unsplash-sketchplugin.git",
   "description": "Easily grab images from Unsplash",
   "license": "MIT",
   "dependencies": {

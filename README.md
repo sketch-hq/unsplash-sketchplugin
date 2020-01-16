@@ -2,7 +2,7 @@
 
 ## Installation
 
-The plugin comes bundled with Sketch 52, but if for some reason you’ve lost it, you can [download it from the releases page](https://github.com/BohemianCoding/unsplash-sketchplugin/releases/latest).
+The plugin comes bundled with Sketch 52, but if for some reason you’ve lost it, you can [download it from the releases page](https://github.com/sketch-hq/unsplash-sketchplugin/releases/latest).
 
 ## Features
 
