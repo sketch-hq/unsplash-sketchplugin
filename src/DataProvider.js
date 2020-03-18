@@ -7,7 +7,7 @@ const { getImagesURLsForItems } = require('./unsplash')
 
 const { DataSupplier, UI, Settings } = sketch
 
-import getImageFromURL from 'sketch-image-downloader'
+const { insertImage, getImageFromURL } = require('sketch-image-downloader')
 
 const SETTING_KEY = 'unsplash.photo.id'
 const FOLDER = path.join(os.tmpdir(), 'com.sketchapp.unsplash-plugin')
