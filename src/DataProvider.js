@@ -7,6 +7,8 @@ const { getImagesURLsForItems } = require('./unsplash')
 
 const { DataSupplier, UI, Settings } = sketch
 
+import getImageFromURL from 'sketch-image-downloader'
+
 const SETTING_KEY = 'unsplash.photo.id'
 const FOLDER = path.join(os.tmpdir(), 'com.sketchapp.unsplash-plugin')
 
@@ -133,7 +135,8 @@ function setImageForContext (context, searchTerm, photoId) {
 
 function process (data, dataKey, index, item, frame) {
   // supply the data
-  return getImageFromURL(data.urls.full, frame).then(imagePath => {
+  let url = `${data.urls.full}&fit=min&w=${frame.width*4}&h=${frame.height*4}`
+  return getImageFromURL(url).then(imagePath => {
     if (!imagePath) {
       // TODO: something wrong happened, show something to the user
       return
@@ -147,33 +150,4 @@ function process (data, dataKey, index, item, frame) {
 
     UI.message('📷 by ' + data.user.name + ' on Unsplash')
   })
-}
-
-function getImageFromURL (url, frame) {
-  return fetch(`${url}&fit=min&w=${frame.width*4}&h=${frame.height*4}`)
-    .then(res => res.blob())
-    // TODO: use imageData directly, once #19391 is implemented
-    .then(saveTempFileFromImageData)
-    .catch((err) => {
-      console.error(err)
-      return context.plugin.urlForResourceNamed('placeholder.png').path()
-    })
-}
-
-function saveTempFileFromImageData (imageData) {
-  const guid = NSProcessInfo.processInfo().globallyUniqueString()
-  const imagePath = path.join(FOLDER, `${guid}.jpg`)
-  try {
-    fs.mkdirSync(FOLDER)
-  } catch (err) {
-    // probably because the folder already exists
-    // TODO: check that it is really because it already exists
-  }
-  try {
-    fs.writeFileSync(imagePath, imageData, 'NSData')
-    return imagePath
-  } catch (err) {
-    console.error(err)
-    return undefined
-  }
 }
