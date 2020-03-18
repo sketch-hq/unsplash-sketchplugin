@@ -135,7 +135,7 @@ function setImageForContext (context, searchTerm, photoId) {
 
 function process (data, dataKey, index, item, frame) {
   // supply the data
-  let url = `${data.urls.full}&fit=min&w=${frame.width*4}&h=${frame.height*4}`
+  let url = `${data.urls.full}&fit=min&w=${frame.width*2}&h=${frame.height*2}`
   return getImageFromURL(url).then(imagePath => {
     if (!imagePath) {
       // TODO: something wrong happened, show something to the user
