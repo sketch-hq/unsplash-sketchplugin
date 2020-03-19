@@ -63,6 +63,7 @@ export function onSearchPhoto (context) {
       selectedLayers.forEach(layer => {
         Settings.setLayerSettingForKey(layer, 'unsplash.search.term', searchTerm)
       })
+      searchTerm = encodeURI(searchTerm)
       if (containsPhotoId(searchTerm)) {
         setImageForContext(context, null, extractPhotoId(searchTerm))
       } else {
@@ -78,6 +79,7 @@ export function onSearchPhoto (context) {
           selectedLayers.forEach(layer => {
             Settings.setLayerSettingForKey(layer, 'unsplash.search.term', searchTerm)
           })
+          searchTerm = encodeURI(searchTerm)
           if (containsPhotoId(searchTerm)) {
             setImageForContext(context, null, extractPhotoId(searchTerm))
           } else {
